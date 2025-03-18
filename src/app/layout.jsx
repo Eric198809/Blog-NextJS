@@ -1,4 +1,6 @@
+import Footer from "@/components/Footer"
 import "./globals.css"
+import Navbar from "@/components/Navbar"
 
 export default function RootLayout({ children }) {
   return (
@@ -6,7 +8,13 @@ export default function RootLayout({ children }) {
       <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-      <body>{children}</body>
+      <body className="flex min-h-full flex-col">
+        <Navbar/>
+        <main className="grow min-h-full">
+        {children}
+        </main>
+        <Footer/>
+      </body>
     </html>
   )
 }
