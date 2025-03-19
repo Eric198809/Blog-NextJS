@@ -13,19 +13,18 @@ const postSchema = new mongoose.Schema(
 postSchema.pre("save", async function (next) {
   if (!this.slug) {
     let slugCandidate = slugify(this.title, { lower: true, strict: true });
-    let slugExists = await mongoose.models.Post.findOne({
-      slug: slugCandidate,
-    });
+    let slugExists = await mongoose.models.Post.findOne({ slug: slugCandidate });
+
     let counter = 1;
     while (slugExists) {
-      slugCandidate = `${slugCandidate}-${counter}`
-      let slugExists = await mongoose.models.Post.findOne({
-        slug: slugCandidate
-      })
-      counter++
+      slugCandidate = `${slugify(this.title, { lower: true, strict: true })}-${counter}`;
+      slugExists = await mongoose.models.Post.findOne({ slug: slugCandidate });
+      counter++;
     }
+
+    this.slug = slugCandidate; // Assigner la valeur finale du slug
   }
-  next()
+  next();
 });
 
 export const Post = mongoose.models?.Post || mongoose.model("Post", postSchema);
